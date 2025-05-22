@@ -11,7 +11,7 @@ export default async function Home() {
 
   return (
     <main className="bg-white">
-      <HeroSection products={products} />
+      <HeroSection />
       <ProductsSection products={products} />
       <AboutSection />
       <WhyChooseUsSection />

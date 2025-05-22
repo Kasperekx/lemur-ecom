@@ -7,7 +7,7 @@ export default function CartLayout({
 }) {
   return (
     <>
-      <CartSteps />
+    {/* <CartSteps /> */} 
       {children}
     </>
   );

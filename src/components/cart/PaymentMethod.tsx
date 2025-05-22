@@ -1,6 +1,4 @@
-'use client';
-
-import { CreditCard, Wallet } from 'lucide-react';
+import { BanknoteIcon, CreditCard, Wallet } from 'lucide-react';
 
 interface PaymentMethodProps {
   selected: string;
@@ -20,6 +18,12 @@ export function PaymentMethod({ selected, onSelect }: PaymentMethodProps) {
       name: 'BLIK',
       description: 'Szybka płatność BLIK',
       icon: Wallet,
+    },
+    {
+      id: 'przelew',
+      name: 'PayU24',
+      description: 'Szybki przelew online',
+      icon: BanknoteIcon,
     },
   ];
 

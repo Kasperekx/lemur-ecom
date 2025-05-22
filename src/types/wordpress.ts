@@ -14,6 +14,7 @@ export interface WPPost {
   _embedded?: {
     author?: Array<{
       name: string;
+      description?: string;
       avatar_urls?: {
         [key: string]: string;
       };
@@ -21,6 +22,13 @@ export interface WPPost {
     'wp:featuredmedia'?: Array<{
       source_url: string;
     }>;
+    'wp:term'?: Array<
+      Array<{
+        id: number;
+        name: string;
+        slug: string;
+      }>
+    >;
   };
 }
 

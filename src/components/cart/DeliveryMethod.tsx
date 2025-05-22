@@ -10,13 +10,6 @@ interface DeliveryMethodProps {
 export function DeliveryMethod({ selected, onSelect }: DeliveryMethodProps) {
   const methods = [
     {
-      id: 'inpost',
-      name: 'InPost Paczkomat',
-      price: 0,
-      time: '1-2 dni robocze',
-      icon: Box,
-    },
-    {
       id: 'courier',
       name: 'Kurier DPD',
       price: 14.99,

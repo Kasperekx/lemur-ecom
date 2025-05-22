@@ -19,5 +19,5 @@ export function useBreadcrumbs(): Breadcrumb[] {
       };
     });
 
-  return [{ href: '/', label: 'Strona główna' }, ...segments];
+  return [{ href: '/', label: 'Strona Główna' }, ...segments];
 }

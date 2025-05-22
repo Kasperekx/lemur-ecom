@@ -1,23 +1,26 @@
 'use client';
 
 import { WPProduct } from '@/types/wordpress';
-import { useSortProducts, type SortOption } from '@/hooks/useSortProducts';
-import { useState } from 'react';
+import { SortOption } from '@/hooks/useSortProducts';
+import { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 
 interface ProductSortProps {
   products: WPProduct[];
+  sortOption?: SortOption;
 }
 
-export function ProductSort({ products }: ProductSortProps) {
+export function ProductSort({
+  products,
+  sortOption = 'newest',
+}: ProductSortProps) {
   const [localProducts, setLocalProducts] = useState(products);
-  const { sortBy, setSortBy } = useSortProducts(products);
 
-  const handleSort = (option: SortOption) => {
-    setSortBy(option);
+  // Apply sorting when products or sortOption changes
+  useEffect(() => {
     const sorted = [...products];
 
-    switch (option) {
+    switch (sortOption) {
       case 'price-asc':
         setLocalProducts(
           sorted.sort((a, b) => Number(a.price) - Number(b.price))
@@ -42,32 +45,13 @@ export function ProductSort({ products }: ProductSortProps) {
           )
         );
     }
-  };
+  }, [products, sortOption]);
 
   return (
     <>
-      <div className="flex justify-between items-center mb-8">
-        <div className="flex items-center gap-4">
-          <span className="text-gray-600">
-            Pokazano {localProducts.length} produktów
-          </span>
-        </div>
-        <select
-          className="border rounded-lg px-4 py-2 bg-white"
-          value={sortBy}
-          onChange={(e) => handleSort(e.target.value as SortOption)}
-        >
-          <option value="newest">Najnowsze</option>
-          <option value="price-asc">Cena: od najniższej</option>
-          <option value="price-desc">Cena: od najwyższej</option>
-          <option value="name-asc">Nazwa: A-Z</option>
-          <option value="name-desc">Nazwa: Z-A</option>
-        </select>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {localProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+        {localProducts.map((product, index) => (
+          <ProductCard key={product.id} product={product} index={index} />
         ))}
       </div>
 

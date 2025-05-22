@@ -1,20 +1,23 @@
 import { getProducts } from '@/lib/getWordpressData';
 import { ProductHeader } from '@/components/products/ProductHeader';
-import { ProductSort } from '@/components/products/ProductSort';
+import ProductsPageClient from '@/components/products/ProductsPageClient';
 
 export default async function ProductsPage() {
+  // Fetch products server-side
   const products = await getProducts();
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 pb-20">
+      {/* Hero Header */}
       <ProductHeader
-        title="Nasze Produkty"
-        description="Odkryj naszą kolekcję wyjątkowych produktów stworzonych z myślą o Tobie"
+        title="Odkryj Nasze Produkty"
+        products={products}
+        description="Zaawansowane rozwiązania diagnostyczne dla nowoczesnej praktyki weterynaryjnej"
         breadcrumbItems={[{ label: 'Produkty', href: '/produkty' }]}
       />
-      <div className="container mx-auto px-4 py-8">
-        <ProductSort products={products} />
-      </div>
+
+      {/* Pass products to client component for interactive elements */}
+      <ProductsPageClient products={products} />
     </div>
   );
 }

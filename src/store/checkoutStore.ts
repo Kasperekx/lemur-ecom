@@ -42,7 +42,6 @@ export const useCheckoutStore = create<CheckoutState>()(
     (set) => ({
       address: null,
       payment: null,
-
       deliveryMethod: 'inpost',
       promoCode: '',
       setAddress: (data) => set({ address: data }),

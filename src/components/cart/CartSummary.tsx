@@ -12,14 +12,12 @@ export function CartSummary() {
   const { getTotalPrice, items } = useCartStore();
   const { address, deliveryMethod, promoCode } = useCheckoutStore();
 
-  // Dodajemy stany lokalne do kontroli renderowania
   const [mounted, setMounted] = useState(false);
   const [total, setTotal] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [deliveryCost, setDeliveryCost] = useState(0);
 
-  // Aktualizujemy wartości po zamontowaniu komponentu
   useEffect(() => {
     const currentSubtotal = getTotalPrice();
     const currentDiscount = promoCode ? currentSubtotal * 0.1 : 0;
@@ -32,7 +30,6 @@ export function CartSummary() {
     setMounted(true);
   }, [getTotalPrice, promoCode, deliveryMethod, items]);
 
-  // Nie renderujemy nic dopóki komponent nie jest zamontowany
   if (!mounted) {
     return null;
   }

@@ -1,17 +1,20 @@
 'use client';
 
 import { Breadcrumbs } from '@/components/ui/breadcrumbs';
+import { WPProduct } from '@/types/wordpress';
 import { useEffect, useState } from 'react';
 
 interface HeaderProductProps {
   title: string;
   description: string;
+  products: WPProduct[];
   breadcrumbItems: Array<{ label: string; href: string }>;
 }
 
 export function ProductHeader({
   title,
   description,
+  products,
   breadcrumbItems,
 }: HeaderProductProps) {
   const [scrollY, setScrollY] = useState(0);
@@ -65,7 +68,7 @@ export function ProductHeader({
               <div className="text-sm text-gray-200 flex items-center gap-4 ml-4">
                 <div className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-secondary rounded-full" />
-                  <span>100+ Produktów</span>
+                  <span>{products.length} produktow +</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-secondary rounded-full" />

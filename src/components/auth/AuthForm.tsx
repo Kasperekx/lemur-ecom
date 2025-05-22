@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -109,7 +107,7 @@ export function AuthForm<T extends z.ZodObject<z.ZodRawShape>>({
                       placeholder={field.placeholder}
                       {...fieldProps}
                     />
-                  </FormControl>
+                    </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

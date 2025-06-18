@@ -47,9 +47,12 @@ export function AuthForm<T extends z.ZodObject<z.ZodRawShape>>({
   const { toast } = useToast();
   const form = useForm<z.infer<T>>({
     resolver: zodResolver(formSchema),
-    defaultValues: fields.reduce((acc, field) => {
-      return { ...acc, [field.name]: '' };
-    }, {} as DefaultValues<z.infer<T>>),
+    defaultValues: fields.reduce(
+      (acc, field) => {
+        return { ...acc, [field.name]: '' };
+      },
+      {} as DefaultValues<z.infer<T>>
+    ),
   });
 
   async function handleSubmit(values: z.infer<T>) {
@@ -107,7 +110,7 @@ export function AuthForm<T extends z.ZodObject<z.ZodRawShape>>({
                       placeholder={field.placeholder}
                       {...fieldProps}
                     />
-                    </FormControl>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

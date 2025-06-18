@@ -92,9 +92,8 @@ const Footer = async () => {
   const featuredProducts = products.slice(0, 5);
 
   const quickLinks = [
-    { name: 'O nas', href: '/about' },
+    { name: 'Produkty', href: '/produkty' },
     { name: 'Kontakt', href: '/kontakt' },
-    { name: 'FAQ', href: '/faq' },
     { name: 'Blog', href: '/blog' },
     { name: 'Polityka prywatności', href: '/privacy' },
   ];
@@ -141,7 +140,7 @@ const Footer = async () => {
                   />
                   <ContactItem
                     icon={<MdLocationOn size={18} />}
-                    text="Warszawa, Polska"
+                    text="Częstochowa, Polska"
                   />
                 </div>
               </div>
@@ -209,10 +208,9 @@ const Footer = async () => {
               <FooterSection title="Newsletter">
                 <div className="space-y-4">
                   <p className="text-gray-600">
-                    Zapisz się, aby otrzymywać informacje o najnowszych
-                    produktach i promocjach.
+                    Już wkrótce będzie możliwość zapisania się do newslettera.
                   </p>
-                  <form className="space-y-3">
+                  {/* <form className="space-y-3">
                     <div className="relative">
                       <input
                         type="email"
@@ -230,7 +228,7 @@ const Footer = async () => {
                       Wysyłamy tylko wartościowe treści. Możesz zrezygnować w
                       każdej chwili.
                     </p>
-                  </form>
+                  </form> */}
                 </div>
               </FooterSection>
             </div>

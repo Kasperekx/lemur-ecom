@@ -1,10 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { CheckCircle, ArrowRight, Award, Clock, Users } from 'lucide-react';
+import { CheckCircle, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 
 const AboutSection = () => {
   const features = [
@@ -63,7 +61,10 @@ const AboutSection = () => {
   };
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden">
+    <section
+      id="about-section"
+      className="relative py-24 md:py-32 overflow-hidden"
+    >
       {/* Modern background elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-white via-slate-50/50 to-secondary/5"></div>
@@ -152,21 +153,6 @@ const AboutSection = () => {
                 </motion.div>
               ))}
             </motion.div>
-
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-4 pt-6 justify-center lg:justify-start"
-            >
-              <Link href="/produkty">
-                <Button
-                  size="lg"
-                  className="h-12 px-8 bg-secondary hover:bg-secondary/90 text-white rounded-md shadow-lg transition-all duration-300 group flex items-center gap-2"
-                >
-                  Nasze Produkty
-                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Button>
-              </Link>
-            </motion.div>
           </div>
 
           <div className="mt-16 lg:mt-0 lg:col-span-6 relative">
@@ -220,7 +206,6 @@ const AboutSection = () => {
                   </motion.div>
                 ))}
               </div>
-
             </div>
           </div>
         </motion.div>

@@ -6,17 +6,13 @@ import Image from 'next/image';
 import { useDebounce } from 'use-debounce';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Menu,
-  X,
-  ShoppingBag,
-  Search,
-  User,
-  ArrowRight,
-  Loader2,
-} from 'lucide-react';
+import { Menu, X, Search, ArrowRight, Loader2 } from 'lucide-react';
 import { createSlug } from '@/utils/strings';
 import { WPProduct } from '@/types/wordpress';
+import { MagneticNavLink } from '@/components/ui/MagneticNavLink';
+import { MagneticLogo } from '@/components/ui/MagneticLogo';
+import { MagneticSearchButton } from '@/components/ui/MagneticSearchButton';
+import { LiquidButton } from '@/components/ui/LiquidButton';
 
 type NavItem = {
   ID: number;
@@ -28,42 +24,6 @@ type NavbarProps = {
   navItems: NavItem[];
   products: WPProduct[];
 };
-
-const NavLink = ({
-  href,
-  children,
-  className,
-  isActive,
-}: {
-  href: string;
-  children: React.ReactNode;
-  className?: string;
-  isActive: boolean;
-}) => (
-  <Link
-    href={href}
-    className={`relative px-3 py-2 text-sm font-medium transition-all duration-300 group
-      ${isActive ? 'text-secondary' : 'text-gray-600 hover:text-gray-900'}
-      ${className}
-    `}
-  >
-    <span className="relative z-10">{children}</span>
-
-    {/* Hover effect */}
-    <span className="absolute inset-0 bg-gray-100 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-0"></span>
-
-    {/* Active indicator */}
-    {isActive && (
-      <motion.div
-        layoutId="navbar-active"
-        className="absolute -bottom-1 left-3 right-3 h-0.5 bg-secondary"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.2 }}
-      />
-    )}
-  </Link>
-);
 
 const Navbar: React.FC<NavbarProps> = ({ navItems, products }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -161,29 +121,23 @@ const Navbar: React.FC<NavbarProps> = ({ navItems, products }) => {
           isHomePage ? 'fixed' : 'relative'
         } top-0 z-50 w-full transition-all duration-500 ${
           hasScrolled || pathName !== '/' || isOpen
-            ? 'bg-white/95 backdrop-blur-md py-3 border-b border-gray-200 shadow-sm'
+            ? 'bg-white/95 backdrop-blur-md py-6 border-b border-gray-200 shadow-sm'
             : 'bg-transparent py-6'
         }`}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link
+            <MagneticLogo
               href="/"
-              className="relative z-50 flex items-center gap-2 group"
-            >
-              <div className="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform shadow-sm">
-                <span className="text-white font-bold text-lg">V</span>
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent group-hover:from-secondary group-hover:to-secondary/70 transition-all duration-300">
-                Vetdesign
-              </span>
-            </Link>
+              logoText="etdesign"
+              className="relative z-50"
+            />
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-1">
               {navItems.map((item) => (
-                <NavLink
+                <MagneticNavLink
                   key={item.ID}
                   href={item.slug === 'strona-glowna' ? '/' : `/${item.slug}`}
                   isActive={
@@ -193,20 +147,17 @@ const Navbar: React.FC<NavbarProps> = ({ navItems, products }) => {
                   }
                 >
                   {item.title}
-                </NavLink>
+                </MagneticNavLink>
               ))}
             </div>
 
             {/* Action Buttons */}
             <div className="hidden lg:flex items-center space-x-2">
               {/* Search Button */}
-              <button
+              <MagneticSearchButton
                 onClick={() => setSearchActive(!searchActive)}
-                className="p-2 text-gray-500 hover:text-gray-800 rounded-full hover:bg-gray-100 transition-colors"
-                aria-label="Search"
-              >
-                <Search size={18} />
-              </button>
+                isActive={searchActive}
+              />
 
               {/* Cart Button */}
               {/* <div className="relative group">
@@ -250,12 +201,9 @@ const Navbar: React.FC<NavbarProps> = ({ navItems, products }) => {
               </div> */}
 
               {/* Contact Button */}
-              <Link
-                href="/kontakt"
-                className="ml-2 px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-all duration-300 shadow-sm hover:shadow-md text-sm font-medium transform hover:translate-y-[-2px]"
-              >
+              <LiquidButton href="/kontakt" className="ml-2">
                 Kontakt
-              </Link>
+              </LiquidButton>
             </div>
 
             {/* Mobile Menu Button */}

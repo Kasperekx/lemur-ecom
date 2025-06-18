@@ -1,13 +1,18 @@
 'use client';
 
 import { ContactForm } from './ContactForm';
+import { WPProduct } from '@/types/wordpress';
 
-export function ContactSection() {
+interface ContactSectionProps {
+  products: WPProduct[];
+}
+
+export function ContactSection({ products }: ContactSectionProps) {
   return (
     <div className="lg:col-span-2 grid grid-cols-1 gap-8 content-start">
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
         <h2 className="text-2xl font-semibold mb-6">Wyślij wiadomość</h2>
-        <ContactForm />
+        <ContactForm products={products} />
       </div>
 
       <div className="rounded-xl overflow-hidden h-[300px] shadow-sm border border-gray-100">

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { MessageSquare, Phone, CheckCircle2, Clock } from 'lucide-react';
 import Image from 'next/image';
 import { WPProduct } from '@/types/wordpress';
+import { Suspense } from 'react';
 
 interface ContactInfo {
   phone: {
@@ -14,6 +15,31 @@ interface ContactInfo {
 interface ContactFormSectionProps {
   contactInfo: ContactInfo;
   products: WPProduct[];
+}
+
+// Loading component for Suspense fallback
+function ContactFormFallback() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      <div className="space-y-4">
+        <div className="h-4 bg-gray-200 rounded w-20"></div>
+        <div className="h-10 bg-gray-200 rounded"></div>
+      </div>
+      <div className="space-y-4">
+        <div className="h-4 bg-gray-200 rounded w-24"></div>
+        <div className="h-10 bg-gray-200 rounded"></div>
+      </div>
+      <div className="space-y-4">
+        <div className="h-4 bg-gray-200 rounded w-28"></div>
+        <div className="h-10 bg-gray-200 rounded"></div>
+      </div>
+      <div className="space-y-4">
+        <div className="h-4 bg-gray-200 rounded w-32"></div>
+        <div className="h-32 bg-gray-200 rounded"></div>
+      </div>
+      <div className="h-12 bg-gray-200 rounded"></div>
+    </div>
+  );
 }
 
 export function ContactFormSection({
@@ -192,9 +218,11 @@ export function ContactFormSection({
                 szybko, jak to możliwe.
               </p>
 
-              {/* Using the existing ContactForm component */}
+              {/* Using the existing ContactForm component wrapped in Suspense */}
               <div className="form-container">
-                <ContactForm products={products} />
+                <Suspense fallback={<ContactFormFallback />}>
+                  <ContactForm products={products} />
+                </Suspense>
               </div>
             </motion.div>
           </div>

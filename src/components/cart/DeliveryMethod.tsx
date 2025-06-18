@@ -1,6 +1,6 @@
 'use client';
 
-import { Truck, Box } from 'lucide-react';
+import { Truck } from 'lucide-react';
 
 interface DeliveryMethodProps {
   selected: string;

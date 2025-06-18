@@ -201,7 +201,7 @@ export function ContactForm({ products }: ContactFormProps) {
                   type="email"
                   placeholder="Twój adres email"
                   {...register('email')}
-                  className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary/30 focus:border-secondary transition-all shadow-sm hover:border-gray-300"
+                  className="w-full py-6 border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary/30 focus:border-secondary transition-all shadow-sm hover:border-gray-300"
                 />
                 <AnimatePresence>
                   {errors.email && (
@@ -230,7 +230,7 @@ export function ContactForm({ products }: ContactFormProps) {
                 <Input
                   placeholder="Temat wiadomości"
                   {...register('subject')}
-                  className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary/30 focus:border-secondary transition-all shadow-sm hover:border-gray-300"
+                  className="w-full py-6 border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary/30 focus:border-secondary transition-all shadow-sm hover:border-gray-300"
                 />
                 <AnimatePresence>
                   {errors.subject && (

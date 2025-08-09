@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Info,
   XCircle,
+  ShoppingCart,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -21,6 +22,7 @@ import { ProductImageGallery } from '@/components/products/ProductImageGallery';
 
 import { AutoBreadcrumbs } from '@/components/ui/auto-breadcrumbs';
 import Image from 'next/image';
+import { AddToCartButton } from '@/components/cart/AddToCartButton';
 
 async function ProductDetailsPage({ params }: { params: { name: string } }) {
   const products: Product[] = await getProducts();
@@ -195,7 +197,7 @@ async function ProductDetailsPage({ params }: { params: { name: string } }) {
 
             {/* Add to cart section */}
             <div className="flex flex-col sm:flex-row gap-4 py-6 border-y border-gray-100">
-              {/* <AddToCartButton
+              <AddToCartButton
                 className={`flex-grow bg-gradient-to-r from-secondary to-secondary/90 text-white font-medium flex items-center justify-center gap-2 py-4 px-8 rounded-full transition-all hover:shadow-lg hover:shadow-secondary/20 active:scale-[0.98] `}
                 product={{
                   id: product.id,
@@ -205,7 +207,7 @@ async function ProductDetailsPage({ params }: { params: { name: string } }) {
                 }}
               >
                 <ShoppingCart className="w-5 h-5" />
-              </AddToCartButton> */}
+              </AddToCartButton>
               <Button variant="default" className="w-full">
                 <Link
                   href={`/kontakt?product=${product.slug}`}

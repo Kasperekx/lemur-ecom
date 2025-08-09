@@ -13,6 +13,7 @@ import { MagneticNavLink } from '@/components/ui/MagneticNavLink';
 import { MagneticLogo } from '@/components/ui/MagneticLogo';
 import { MagneticSearchButton } from '@/components/ui/MagneticSearchButton';
 import { LiquidButton } from '@/components/ui/LiquidButton';
+import { CartIndicator } from '@/components/cart/CartIndicator';
 
 type NavItem = {
   ID: number;
@@ -33,6 +34,10 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
   const [searchResults, setSearchResults] = useState<WPProduct[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const cacheRef = useRef<Map<string, WPProduct[]>>(new Map());
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
+  const [allProducts, setAllProducts] = useState<WPProduct[] | null>(null);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
+  const [productsError, setProductsError] = useState<string | null>(null);
   const pathName = usePathname();
   const router = useRouter();
   const isHomePage = pathName === '/';
@@ -66,6 +71,22 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+  };
+
+  const loadAllProducts = async () => {
+    if (allProducts || isLoadingProducts) return;
+    setIsLoadingProducts(true);
+    setProductsError(null);
+    try {
+      const res = await fetch('/api/all-products');
+      const data: WPProduct[] = await res.json();
+      setAllProducts(Array.isArray(data) ? data : []);
+    } catch {
+      setProductsError('Nie udało się załadować produktów');
+      setAllProducts([]);
+    } finally {
+      setIsLoadingProducts(false);
+    }
   };
 
   useEffect(() => {
@@ -140,13 +161,13 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
         className={`
         ${
           isHomePage ? 'fixed' : 'relative'
-        } top-0 z-50 w-full transition-all duration-500 ${
-          hasScrolled || pathName !== '/' || isOpen
-            ? 'bg-white/95 backdrop-blur-md py-6 border-b border-gray-200 shadow-sm'
-            : 'bg-transparent py-6'
+        } top-0 z-50 w-full transition-all duration-300 ${
+          hasScrolled || pathName !== '/' || isOpen || searchActive
+            ? 'bg-white/95 backdrop-blur-xl py-4 border-b border-gray-200 shadow-xl ring-1 ring-black/5'
+            : 'bg-white py-4'
         }`}
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-6">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <MagneticLogo
@@ -156,73 +177,118 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
             />
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-1">
-              {navItems.map((item) => (
-                <MagneticNavLink
-                  key={item.ID}
-                  href={item.slug === 'strona-glowna' ? '/' : `/${item.slug}`}
-                  isActive={
-                    (item.slug === 'strona-glowna' && pathName === '/') ||
-                    (item.slug !== 'strona-glowna' &&
-                      pathName === `/${item.slug}`)
-                  }
-                >
-                  {item.title}
-                </MagneticNavLink>
-              ))}
+            <div className="hidden lg:flex items-center space-x-2">
+              {navItems.map((item) => {
+                const isProductsItem = item.slug === 'produkty';
+                if (!isProductsItem) {
+                  return (
+                    <MagneticNavLink
+                      key={item.ID}
+                      href={
+                        item.slug === 'strona-glowna' ? '/' : `/${item.slug}`
+                      }
+                      isActive={
+                        (item.slug === 'strona-glowna' && pathName === '/') ||
+                        (item.slug !== 'strona-glowna' &&
+                          pathName === `/${item.slug}`)
+                      }
+                    >
+                      {item.title}
+                    </MagneticNavLink>
+                  );
+                }
+
+                return (
+                  <div
+                    key={item.ID}
+                    className="relative"
+                    onMouseEnter={() => {
+                      setIsProductsOpen(true);
+                      loadAllProducts();
+                    }}
+                    onMouseLeave={() => setIsProductsOpen(false)}
+                    onFocus={() => {
+                      setIsProductsOpen(true);
+                      loadAllProducts();
+                    }}
+                  >
+                    <MagneticNavLink
+                      href={`/${item.slug}`}
+                      isActive={pathName.startsWith('/produkty')}
+                    >
+                      {item.title}
+                    </MagneticNavLink>
+
+                    {/* Products Dropdown */}
+                    {isProductsOpen && (
+                      <div className="absolute left-0 mt-2 w-[400px] max-w-[95vw] bg-white border border-gray-200 rounded-xl shadow-lg ring-1 ring-black/5 p-4 z-50">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-sm font-medium text-gray-700">
+                            Produkty
+                          </span>
+                          <Link
+                            href="/produkty"
+                            className="text-xs text-secondary hover:text-secondary/80 transition-colors"
+                          >
+                            Zobacz wszystkie
+                          </Link>
+                        </div>
+                        {isLoadingProducts ? (
+                          <div className="space-y-1">
+                            {Array.from({ length: 8 }).map((_, i) => (
+                              <div
+                                key={i}
+                                className="h-8 bg-gray-100 rounded animate-pulse"
+                              />
+                            ))}
+                          </div>
+                        ) : productsError ? (
+                          <div className="text-sm text-red-600 p-2 bg-red-50 rounded">
+                            <span>{productsError}</span>
+                          </div>
+                        ) : (
+                          <div className="space-y-0.5 max-h-64 overflow-y-auto">
+                            {(allProducts || []).slice(0, 15).map((product) => (
+                              <Link
+                                key={product.id}
+                                href={`/produkty/${createSlug(product.name)}`}
+                                className="group block px-3 py-2.5 rounded-lg hover:bg-secondary/5 transition-all duration-200 text-sm text-gray-700 hover:text-secondary border border-transparent hover:border-secondary/20 hover:shadow-sm"
+                                onClick={() => setIsProductsOpen(false)}
+                              >
+                                <span className="group-hover:translate-x-1 transition-transform duration-200 inline-block">
+                                  {product.name}
+                                </span>
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Action Buttons */}
-            <div className="hidden lg:flex items-center space-x-2">
+            <div className="hidden lg:flex items-center space-x-4">
               {/* Search Button */}
               <MagneticSearchButton
                 onClick={() => setSearchActive(!searchActive)}
                 isActive={searchActive}
+                className="shadow-sm hover:shadow-md rounded-xl transition-all duration-200"
               />
 
-              {/* Cart Button */}
-              {/* <div className="relative group">
-                <Link
-                  href="/koszyk"
-                  className="p-2 text-gray-500 hover:text-gray-800 rounded-full hover:bg-gray-100 transition-colors"
-                >
-                  <ShoppingBag size={18} />
-                  <span className="absolute -top-1 -right-1 bg-secondary text-[10px] text-white rounded-full w-4 h-4 flex items-center justify-center font-bold shadow-sm">
-                    3
-                  </span>
-                </Link> */}
+              {/* Cart Indicator */}
+              <CartIndicator className="p-3 text-gray-600 hover:text-gray-900 rounded-xl hover:bg-gray-100 transition-all duration-200 shadow-sm hover:shadow-md" />
 
-              {/* Mini Cart Preview */}
-              {/* <div className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg backdrop-blur-md p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                  <div className="text-sm font-medium text-gray-800 mb-2">
-                    Twój koszyk (3)
-                  </div>
-                  <div className="divide-y divide-gray-100">
-                    <div className="py-2 flex gap-2">
-                      <div className="w-10 h-10 bg-gray-100 rounded"></div>
-                      <div className="flex-1">
-                        <div className="text-xs text-gray-800">Produkt 1</div>
-                        <div className="text-xs text-gray-500">1 × 120 zł</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-2 pt-2 border-t border-gray-100 flex justify-between">
-                    <span className="text-xs text-gray-800">Suma:</span>
-                    <span className="text-xs font-medium text-secondary">
-                      360 zł
-                    </span>
-                  </div>
-                  <Link
-                    href="/koszyk"
-                    className="mt-3 block w-full py-2 bg-secondary text-white text-center rounded-lg text-xs font-medium hover:bg-secondary/90 transition-colors shadow-sm"
-                  >
-                    Przejdź do koszyka
-                  </Link>
-                </div>
-              </div> */}
+              {/* Divider */}
+              <span className="h-8 w-px bg-gray-300" />
 
               {/* Contact Button */}
-              <LiquidButton href="/kontakt" className="ml-2">
+              <LiquidButton
+                href="/kontakt"
+                className="px-6 py-2.5 text-sm font-medium"
+              >
                 Kontakt
               </LiquidButton>
             </div>
@@ -280,14 +346,14 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="absolute left-0 right-0 top-full bg-white border-t border-gray-200 shadow-md z-30"
+              className="absolute left-0 right-0 top-full bg-white/95 backdrop-blur-xl border-t border-gray-200 shadow-xl z-30"
             >
               <div className="container mx-auto px-4 py-4">
                 <form onSubmit={handleSearchSubmit} className="relative">
                   <input
                     type="text"
                     placeholder="Szukaj produktów..."
-                    className="w-full bg-gray-50 border border-gray-200 rounded-lg py-3 px-4 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary/30"
+                    className="w-full bg-white border border-gray-300 rounded-xl py-4 px-5 text-gray-800 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary/30 shadow-sm"
                     value={searchQuery}
                     onChange={handleSearch}
                     autoFocus
@@ -306,7 +372,7 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
 
                 {/* Search Results - Fixed Positioning */}
                 {searchResults.length > 0 && (
-                  <div className="relative mt-2 bg-white rounded-xl shadow-xl border border-gray-200 z-40 overflow-hidden">
+                  <div className="relative mt-3 bg-white rounded-xl shadow-2xl border border-gray-200 ring-1 ring-black/5 z-40 overflow-hidden">
                     <div className="max-h-[400px] overflow-y-auto py-2 scroll-smooth">
                       <div className="sticky top-0 px-4 py-3 bg-gray-50 border-b border-gray-200 backdrop-blur-sm">
                         <p className="text-sm font-medium text-gray-700 flex items-center justify-between">
@@ -327,22 +393,22 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
                           <Link
                             key={product.id}
                             href={`/produkty/${createSlug(product.name)}`}
-                            className="block rounded-lg hover:bg-gray-50 transition-colors group"
+                            className="block rounded-xl hover:bg-gray-50 transition-all duration-200 group m-1"
                             onClick={() => setSearchActive(false)}
                           >
-                            <div className="flex items-center gap-4 p-3">
+                            <div className="flex items-center gap-4 p-4">
                               {product.images && product.images.length > 0 ? (
-                                <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200 group-hover:border-secondary/30 transition-colors">
+                                <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 border border-gray-200 group-hover:border-secondary/30 transition-all duration-200">
                                   <Image
                                     src={product.images[0].src}
                                     alt={product.name}
                                     width={64}
                                     height={64}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                                   />
                                 </div>
                               ) : (
-                                <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 border border-gray-200">
+                                <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 border border-gray-200">
                                   <span className="text-gray-400 text-xs">
                                     Brak zdjęcia
                                   </span>
@@ -363,10 +429,10 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
                                   )}
                                 </div>
                               </div>
-                              <span className="w-8 h-8 rounded-full bg-gray-100 group-hover:bg-secondary/10 flex items-center justify-center transition-colors">
+                              <span className="w-8 h-8 rounded-full bg-gray-100 group-hover:bg-secondary/10 flex items-center justify-center transition-all duration-200">
                                 <ArrowRight
                                   size={16}
-                                  className="text-gray-400 group-hover:text-secondary"
+                                  className="text-gray-400 group-hover:text-secondary group-hover:translate-x-0.5 transition-all duration-200"
                                 />
                               </span>
                             </div>
@@ -438,7 +504,7 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
             animate={{ opacity: 1, height: '100vh' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 lg:hidden bg-gradient-to-b from-white to-gray-50 backdrop-blur-md overflow-hidden"
+            className="fixed inset-0 z-40 lg:hidden bg-gradient-to-b from-white to-gray-100 backdrop-blur-lg overflow-hidden"
           >
             <motion.div
               className="h-full pt-24 pb-8 px-4 flex flex-col overflow-y-auto"
@@ -481,23 +547,90 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
 
                 {/* Navigation Links */}
                 <motion.div variants={childVariants} className="space-y-1 mb-8">
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.ID}
-                      href={
-                        item.slug === 'strona-glowna' ? '/' : `/${item.slug}`
-                      }
-                      className={`block px-4 py-3 rounded-lg transition-colors duration-200 ${
-                        (item.slug === 'strona-glowna' && pathName === '/') ||
-                        (item.slug !== 'strona-glowna' &&
-                          pathName === `/${item.slug}`)
-                          ? 'bg-secondary/10 text-secondary font-medium'
-                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                      }`}
-                    >
-                      {item.title}
-                    </Link>
-                  ))}
+                  {navItems.map((item) => {
+                    const isProductsItem = item.slug === 'produkty';
+                    if (!isProductsItem) {
+                      return (
+                        <Link
+                          key={item.ID}
+                          href={
+                            item.slug === 'strona-glowna'
+                              ? '/'
+                              : `/${item.slug}`
+                          }
+                          className={`block px-4 py-3 rounded-lg transition-colors duration-200 ${
+                            (item.slug === 'strona-glowna' &&
+                              pathName === '/') ||
+                            (item.slug !== 'strona-glowna' &&
+                              pathName === `/${item.slug}`)
+                              ? 'bg-secondary/10 text-secondary font-medium'
+                              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                          }`}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {item.title}
+                        </Link>
+                      );
+                    }
+
+                    return (
+                      <div key={item.ID} className="px-2">
+                        <button
+                          className="w-full flex items-center justify-between px-3 py-3.5 rounded-xl text-gray-700 hover:bg-gray-100 transition-all duration-200"
+                          onClick={async () => {
+                            if (!allProducts) await loadAllProducts();
+                            setIsProductsOpen((v) => !v);
+                          }}
+                          aria-expanded={isProductsOpen}
+                        >
+                          <span>{item.title}</span>
+                          <span
+                            className={`transition-transform ${
+                              isProductsOpen ? 'rotate-180' : ''
+                            }`}
+                          >
+                            <ArrowRight size={16} />
+                          </span>
+                        </button>
+                        <AnimatePresence initial={false}>
+                          {isProductsOpen && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              className="pl-4"
+                            >
+                              <div className="py-2 space-y-0.5 max-h-60 overflow-y-auto">
+                                {isLoadingProducts
+                                  ? Array.from({ length: 8 }).map((_, i) => (
+                                      <div
+                                        key={i}
+                                        className="h-8 bg-gray-100 rounded animate-pulse"
+                                      />
+                                    ))
+                                  : (allProducts || [])
+                                      .slice(0, 12)
+                                      .map((product) => (
+                                        <Link
+                                          key={product.id}
+                                          href={`/produkty/${createSlug(
+                                            product.name
+                                          )}`}
+                                          className="group block px-3 py-2.5 rounded-lg text-gray-700 hover:bg-secondary/5 hover:text-secondary transition-all duration-200 text-sm border border-transparent hover:border-secondary/20"
+                                          onClick={() => setIsOpen(false)}
+                                        >
+                                          <span className="group-hover:translate-x-1 transition-transform duration-200 inline-block">
+                                            {product.name}
+                                          </span>
+                                        </Link>
+                                      ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  })}
                 </motion.div>
 
                 {/* Search */}
@@ -507,13 +640,13 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
                       <input
                         type="text"
                         placeholder="Szukaj produktów..."
-                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-3 px-4 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary/30 shadow-sm"
+                        className="w-full bg-white border border-gray-300 rounded-xl py-4 px-5 text-gray-800 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary/30 shadow-sm"
                         value={searchQuery}
                         onChange={handleSearch}
                       />
                       <button
                         type="submit"
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-secondary transition-colors"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-secondary transition-colors"
                       >
                         <Search size={18} />
                       </button>
@@ -522,39 +655,39 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
 
                   {/* Mobile search results */}
                   {searchQuery.length >= 2 && searchResults.length > 0 && (
-                    <div className="mt-4 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <div className="mt-4 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
                       <div className="max-h-60 overflow-y-auto">
                         <div className="divide-y divide-gray-100">
                           {searchResults.slice(0, 5).map((product) => (
                             <Link
                               key={product.id}
                               href={`/produkty/${createSlug(product.name)}`}
-                              className="block p-3 hover:bg-gray-50 transition-colors"
+                              className="block p-4 hover:bg-gray-50 transition-colors"
                               onClick={() => setIsOpen(false)}
                             >
                               <div className="flex items-center gap-3">
                                 {product.images && product.images.length > 0 ? (
-                                  <div className="w-10 h-10 bg-gray-100 rounded overflow-hidden">
+                                  <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                                     <Image
                                       src={product.images[0].src}
                                       alt={product.name}
-                                      width={40}
-                                      height={40}
+                                      width={48}
+                                      height={48}
                                       className="w-full h-full object-cover"
                                     />
                                   </div>
                                 ) : (
-                                  <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center">
+                                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                                     <span className="text-gray-400 text-xs">
                                       Brak
                                     </span>
                                   </div>
                                 )}
-                                <div>
-                                  <h4 className="text-sm font-medium text-gray-800 line-clamp-1">
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="text-sm font-medium text-gray-800 line-clamp-1 mb-1">
                                     {product.name}
                                   </h4>
-                                  <p className="text-xs text-secondary font-semibold">
+                                  <p className="text-sm text-secondary font-semibold">
                                     {product.price} zł
                                   </p>
                                 </div>
@@ -563,16 +696,19 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
                           ))}
                         </div>
                       </div>
-                      <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
+                      <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
                         <Link
                           href={`/produkty?search=${encodeURIComponent(
                             searchQuery
                           )}`}
-                          className="text-sm text-secondary hover:underline flex items-center justify-center gap-1"
+                          className="text-sm text-secondary hover:underline flex items-center justify-center gap-1 font-medium"
                           onClick={() => setIsOpen(false)}
                         >
                           Zobacz wszystkie wyniki
-                          <ArrowRight size={14} />
+                          <ArrowRight
+                            size={14}
+                            className="transition-transform group-hover:translate-x-1"
+                          />
                         </Link>
                       </div>
                     </div>
@@ -583,7 +719,7 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
                 <motion.div variants={childVariants} className="mt-auto py-4">
                   <Link
                     href="/kontakt"
-                    className="block w-full py-3.5 bg-secondary text-white text-center rounded-lg font-medium hover:bg-secondary/90 transition-colors shadow-sm"
+                    className="block w-full py-4 bg-secondary text-white text-center rounded-xl font-semibold hover:bg-secondary/90 transition-all duration-200 shadow-lg hover:shadow-xl"
                   >
                     Skontaktuj się z nami
                   </Link>

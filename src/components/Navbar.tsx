@@ -94,8 +94,8 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
             debouncedSearchQuery,
             Array.isArray(data) ? data : []
           );
-        } catch (err: any) {
-          if (err?.name !== 'AbortError') {
+        } catch (err: unknown) {
+          if (err instanceof Error && err.name !== 'AbortError') {
             console.error('Search error:', err);
           }
         } finally {

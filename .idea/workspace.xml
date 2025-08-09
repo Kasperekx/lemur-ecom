@@ -6,54 +6,36 @@
   <component name="ChangeListManager">
     <list default="true" id="2eeedbcc-534e-44c4-97d4-308e014f8042" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/next.config.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/blog/[slug]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/blog/[slug]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/blog/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/blog/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/kontakt/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/kontakt/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/produkty/[name]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/produkty/[name]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Footer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Navbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/cart/AddToCartButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/cart/AddToCartButton.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/cart/CartSummary.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/cart/CartSummary.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/cart/PaymentMethod.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/cart/PaymentMethod.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/AboutSection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/AboutSection.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/BlogSection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/BlogSection.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/HeroSection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/HeroSection.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/ProductsSection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/ProductsSection.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/WhyChooseUsSection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/WhyChooseUsSection.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/products/ProductCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/products/ProductCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/products/ProductImageGallery.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/products/ProductImageGallery.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/products/product.type.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/products/product.type.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/button.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/use-toast.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/use-toast.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useBreadcrumbs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useBreadcrumbs.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/getWordpressData.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/getWordpressData.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/wordpress.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/wordpress.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/rejestracja/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/rejestracja/actions.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "web3linksdev"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;web3linksdev&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "git@github.com:Kasperekx/lemur-ecom.git",
-    "accountId": "c98e6a43-6c1a-48a0-ab2e-907b93d37bea"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:Kasperekx/lemur-ecom.git&quot;,
+    &quot;accountId&quot;: &quot;c98e6a43-6c1a-48a0-ab2e-907b93d37bea&quot;
   }
-}]]></component>
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/opt/homebrew/Cellar/php/8.3.2/bin/php" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -62,25 +44,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.codeium.enabled": "true",
-    "git-widget-placeholder": "master",
-    "js.debugger.nextJs.config.created.client": "true",
-    "js.debugger.nextJs.config.created.server": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "prettierjs.PrettierConfiguration.Package": "/Users/piotrkasperek/.nvm/versions/node/v20.10.0/lib/node_modules/prettier",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "ts.external.directory.path": "/Users/piotrkasperek/Desktop/lemurv2/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;js.debugger.nextJs.config.created.client&quot;: &quot;true&quot;,
+    &quot;js.debugger.nextJs.config.created.server&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/piotrkasperek/Documents/projects/websites/lemurv2&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/piotrkasperek/.nvm/versions/node/v20.10.0/lib/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/piotrkasperek/Documents/projects/websites/lemurv2/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="npm.Next.js: server-side">
     <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
       <method v="2" />
@@ -99,7 +82,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-WS-251.23774.424" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
       </set>
     </attachedChunks>
   </component>
@@ -115,10 +99,17 @@
       <workItem from="1730421469280" duration="601000" />
       <workItem from="1737311859187" duration="72000" />
       <workItem from="1746463588190" duration="332000" />
+      <workItem from="1751214863853" duration="178000" />
+      <workItem from="1751215058791" duration="154000" />
+      <workItem from="1751824486942" duration="792000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

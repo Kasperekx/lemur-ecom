@@ -167,7 +167,6 @@ const AboutSection = () => {
                   fill
                   alt="Mikroskop w laboratorium symbolizujący zaawansowaną technologię weterynaryjną"
                   className="object-cover"
-                  priority
                   sizes="(max-width: 1024px) 90vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-secondary/20 to-transparent mix-blend-multiply"></div>

@@ -57,7 +57,7 @@ export async function register(data: RegisterInput) {
     if (error instanceof z.ZodError) {
       return {
         success: false,
-        error: 'Nieprawidłowe dane formularza',
+        error: 'Nieprawidłowe dane formularza.',
         validationErrors: error.errors,
       };
     }
@@ -67,7 +67,7 @@ export async function register(data: RegisterInput) {
       error:
         error instanceof Error
           ? error.message
-          : 'Wystąpił błąd podczas rejestracji',
+          : 'Wystąpił błąd podczas rejestacji.',
     };
   }
 }

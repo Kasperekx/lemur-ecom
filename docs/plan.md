@@ -1,6 +1,6 @@
-# Awwwards-Style Navbar Enhancement Plan
+# Plan ogólny – rozszerzenie o wydajność (pierwsze ładowanie)
 
-**Timestamp**: 2024-12-19_16-45
+**Last update**: 2025-08-09_14-33
 
 ## Current State Analysis
 
@@ -11,6 +11,13 @@ The current navbar has:
 - Search functionality with dropdown results
 - Mobile responsive hamburger menu
 - Basic hover animations on navigation links
+
+## Priorytet: Wydajność – pierwsze ładowanie
+
+- Layout nie powinien pobierać ciężkich danych (produkty). Dane produktów tylko tam, gdzie są wyświetlane.
+- Wprowadzić ISR/revalidate do zapytań WordPress/WooCommerce.
+- Ograniczyć `priority` obrazów do krytycznego hero.
+- Lazy-load sekcji mniej krytycznych („below the fold”), np. blog.
 
 ## Proposed Awwwards-Style Improvements
 

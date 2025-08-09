@@ -2,6 +2,8 @@ import { getProducts } from '@/lib/getWordpressData';
 import { ProductHeader } from '@/components/products/ProductHeader';
 import ProductsPageClient from '@/components/products/ProductsPageClient';
 
+export const revalidate = 300;
+
 export default async function ProductsPage() {
   // Fetch products server-side
   const products = await getProducts();

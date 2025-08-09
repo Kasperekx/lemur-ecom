@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useDebounce } from 'use-debounce';
@@ -22,10 +22,9 @@ type NavItem = {
 
 type NavbarProps = {
   navItems: NavItem[];
-  products: WPProduct[];
 };
 
-const Navbar: React.FC<NavbarProps> = ({ navItems, products }) => {
+const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [searchActive, setSearchActive] = useState(false);
@@ -33,6 +32,7 @@ const Navbar: React.FC<NavbarProps> = ({ navItems, products }) => {
   const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
   const [searchResults, setSearchResults] = useState<WPProduct[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const cacheRef = useRef<Map<string, WPProduct[]>>(new Map());
   const pathName = usePathname();
   const router = useRouter();
   const isHomePage = pathName === '/';
@@ -71,22 +71,43 @@ const Navbar: React.FC<NavbarProps> = ({ navItems, products }) => {
   useEffect(() => {
     if (debouncedSearchQuery.length >= 2) {
       setIsSearching(true);
-      const filtered = products.filter(
-        (product) =>
-          product.name
-            .toLowerCase()
-            .includes(debouncedSearchQuery.toLowerCase()) ||
-          (product.description &&
-            product.description
-              .toLowerCase()
-              .includes(debouncedSearchQuery.toLowerCase()))
-      );
-      setSearchResults(filtered);
-      setIsSearching(false);
+
+      const cached = cacheRef.current.get(debouncedSearchQuery);
+      if (cached) {
+        setSearchResults(cached);
+        setIsSearching(false);
+        return;
+      }
+
+      const controller = new AbortController();
+      const run = async () => {
+        try {
+          const res = await fetch(
+            `/api/search-products?q=${encodeURIComponent(
+              debouncedSearchQuery
+            )}`,
+            { signal: controller.signal }
+          );
+          const data: WPProduct[] = await res.json();
+          setSearchResults(Array.isArray(data) ? data : []);
+          cacheRef.current.set(
+            debouncedSearchQuery,
+            Array.isArray(data) ? data : []
+          );
+        } catch (err: any) {
+          if (err?.name !== 'AbortError') {
+            console.error('Search error:', err);
+          }
+        } finally {
+          setIsSearching(false);
+        }
+      };
+      run();
+      return () => controller.abort();
     } else {
       setSearchResults([]);
     }
-  }, [debouncedSearchQuery, products]);
+  }, [debouncedSearchQuery]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();

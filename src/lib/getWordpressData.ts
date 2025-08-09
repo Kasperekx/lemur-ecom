@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { agent } from './utils';
 import { WPPost } from '@/types/wordpress';
+import { unstable_cache } from 'next/cache';
 
 const samplePosts: WPPost[] = [
   {
@@ -153,9 +154,7 @@ export async function getWordpressMenuItems() {
   try {
     const response = await fetch(
       `${process.env.WORDPRESS_URL}/wp-json/menus/v1/menus/main`,
-      {
-        cache: 'no-cache',
-      }
+      { next: { revalidate: 300 } }
     );
     const data = await response.json();
     if (data.items.length > 0) {
@@ -181,12 +180,20 @@ export const wooCommerceClient = axios.create({
   httpsAgent: agent,
 });
 
-export async function getProducts() {
-  try {
+const getProductsCached = unstable_cache(
+  async () => {
     const { data: products } = await wooCommerceClient.get(
       '/wp-json/wc/v3/products'
     );
     return products;
+  },
+  ['woo_products_all'],
+  { revalidate: 300 }
+);
+
+export async function getProducts() {
+  try {
+    return await getProductsCached();
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`Failed to fetch products: ${error.message}`);
@@ -211,7 +218,7 @@ export async function getLatestBlogPosts(count: number = 3) {
   try {
     const response = await fetch(
       `${process.env.WORDPRESS_URL}/wp-json/wp/v2/posts?_embed&per_page=${count}`,
-      { next: { revalidate: 1 } }
+      { next: { revalidate: 120 } }
     );
 
     if (!response.ok) {
@@ -230,7 +237,7 @@ export async function getBlogPosts() {
   try {
     const response = await fetch(
       `${process.env.WORDPRESS_URL}/wp-json/wp/v2/posts?_embed`,
-      { next: { revalidate: 1 } }
+      { next: { revalidate: 120 } }
     );
 
     if (!response.ok) {
@@ -255,7 +262,7 @@ export async function getPostBySlug(slug: string) {
   try {
     const response = await fetch(
       `${WP_URL}/wp-json/wp/v2/posts?slug=${slug}&_embed`,
-      { next: { revalidate: 1 } }
+      { next: { revalidate: 120 } }
     );
 
     if (!response.ok) {
